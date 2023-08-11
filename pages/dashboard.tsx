@@ -329,14 +329,14 @@ function Dashboard(): JSX.Element {
 
   const parseCSV = (data: any) => {
     const amountsArr = Object.values(data.map(d => parseUnits(d.amount, tokenDecimals)));
-    console.log(amountsArr)
+    console.log(amountsArr);
     let totalAmount = BigNumber.from("0");
     for (let i = 0; i < amountsArr.length; i++) {
       totalAmount = totalAmount.add(BigNumber.from(amountsArr[i]));
     }
     setEnoughTokenBalance(BigNumber.from(tokenBalance?.raw.toString()).gte(totalAmount));
     const beneficiariesArr = data.map(d => d.beneficiary);
-    console.log(beneficiariesArr)
+    console.log(beneficiariesArr);
     setBeneficiaries(beneficiariesArr);
     const cliffsArr = new Array(beneficiariesArr.length).fill(cliff);
     setCliffs(cliffsArr);
@@ -376,7 +376,10 @@ function Dashboard(): JSX.Element {
     const reader = new FileReader();
     const [file]: any = input && input.files;
     reader.onloadend = ({ target }) => {
-      const csv = Papa.parse(target?.result, { header: true });
+      const csv = Papa.parse(target?.result, {
+        header: true,
+        skipEmptyLines: true, // Skip empty lines during parsing
+      });
       if (chainId !== undefined) {
         if (chainId !== undefined) {
           if (csv && csv.data) {
